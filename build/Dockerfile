@@ -56,14 +56,15 @@ RUN dotnet publish -c Release -o /app/lib/Default && mv /app/lib/Default/appsett
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-bionic
 
 #needed for byond
-RUN sudo dpkg --add-architecture i386 \
-	apt-get update \
+RUN dpkg --add-architecture i386 \
+	&& apt-get update \
 	&& apt-get install -y \
 	gcc-multilib \
 	libmariadb-dev:i386 \
 	libssl1.1:i386 \
 	zlib1g:i386 \
-	&& rm -rf /var/lib/apt/lists/*
+	&& rm -rf /var/lib/apt/lists/* \
+	&& ln /usr/lib/i386-linux-gnu/libmariadb.so.3 /usr/lib/i386-linux-gnu/libmariadb.so.2 
 	
 EXPOSE 5000
 
